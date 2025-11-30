@@ -490,7 +490,28 @@ export default function AdminDashboard() {
       // Save to Local Storage instead of Supabase
       savePendingProductToStorage(newProduct);
 
-      setProductForm({ id: '', name: '', price: '', description: '', category: '', image: '', featured: false, searchKeywords: [] });
+      setProductForm({ 
+        id: '', 
+        name: '', 
+        price: '', 
+        mrp: '', 
+        offer: '', 
+        description: '', 
+        category: '', 
+        image: '', 
+        videoUrl: '', 
+        specifications: {
+          ingredients: '',
+          quantity: '',
+          usageMethod: '',
+          effectiveness: '',
+          applicableCrops: '',
+          additionalInfo: '',
+          specialNotes: ''
+        },
+        featured: false, 
+        searchKeywords: [] 
+      });
       setEditingProduct(false);
       showMessage('success', editingProduct ? 'Product updated in queue!' : 'Product added to queue! Click "Save All" to commit.');
     } catch (error) {
