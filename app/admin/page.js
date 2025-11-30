@@ -39,9 +39,21 @@ export default function AdminDashboard() {
     id: '',
     name: '',
     price: '',
+    mrp: '',
+    offer: '',
     description: '',
     category: '',
     image: '',
+    videoUrl: '',
+    specifications: {
+      ingredients: '',
+      quantity: '',
+      usageMethod: '',
+      effectiveness: '',
+      applicableCrops: '',
+      additionalInfo: '',
+      specialNotes: ''
+    },
     featured: false,
     searchKeywords: []
   });
