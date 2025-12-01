@@ -1319,7 +1319,8 @@ export default function Home() {
             </div>
 
             {/* Dialog Body */}
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+              {/* Name */}
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
                   नाव <span className="text-red-500">*</span>
@@ -1334,18 +1335,70 @@ export default function Home() {
                 />
               </div>
 
+              {/* Address Line (Nearby, Landmark, Road) */}
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
-                  पत्ता <span className="text-red-500">*</span>
+                  पत्ता/लँडमार्क <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  value={addressForm.address}
-                  onChange={(e) => setAddressForm({ ...addressForm, address: e.target.value })}
-                  placeholder="पूर्ण पत्ता (गाव, तालुका, जिल्हा, पिनकोड)"
-                  rows="4"
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:outline-none transition resize-none"
-                  data-testid="address-input"
+                <input
+                  type="text"
+                  value={addressForm.addressLine}
+                  onChange={(e) => setAddressForm({ ...addressForm, addressLine: e.target.value })}
+                  placeholder="जवळ, लँडमार्क, रस्ता (उदा: Near To Shetakri Chowk, बस्ती)"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:outline-none transition"
+                  data-testid="address-line-input"
                 />
+              </div>
+
+              {/* City/Village */}
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">
+                  गाव/शहर <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  value={addressForm.cityVillage}
+                  onChange={(e) => setAddressForm({ ...addressForm, cityVillage: e.target.value })}
+                  placeholder="गाव किंवा शहराचे नाव (उदा: Savargaon, जुनर)"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:outline-none transition"
+                  data-testid="address-city-input"
+                />
+              </div>
+
+              {/* State and Pincode Row */}
+              <div className="grid grid-cols-2 gap-3">
+                {/* State (Prefilled) */}
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    राज्य <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={addressForm.state}
+                    onChange={(e) => setAddressForm({ ...addressForm, state: e.target.value })}
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg bg-gray-50 focus:border-emerald-500 focus:outline-none transition"
+                    data-testid="address-state-input"
+                  />
+                </div>
+
+                {/* Pincode */}
+                <div>
+                  <label className="block text-sm font-bold text-gray-700 mb-2">
+                    पिनकोड <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={addressForm.pincode}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                      setAddressForm({ ...addressForm, pincode: value });
+                    }}
+                    placeholder="६ अंकी"
+                    maxLength="6"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-emerald-500 focus:outline-none transition"
+                    data-testid="address-pincode-input"
+                  />
+                </div>
               </div>
 
               <button
