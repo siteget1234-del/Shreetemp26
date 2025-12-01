@@ -267,7 +267,11 @@ export default function Home() {
   const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const generateWhatsAppMessage = () => {
-    let message = 'मला खरेदी करायची आहे:\n\n';
+    // Shop and customer details
+    let message = `दुकान: ${shopData?.shop_name || 'Shop Name'}\n\n`;
+    message += `ग्राहक नाव: ${deliveryAddress?.name || ''}\n`;
+    message += `पत्ता: ${deliveryAddress?.addressLine || ''}, ${deliveryAddress?.cityVillage || ''}, ${deliveryAddress?.state || ''}, ${deliveryAddress?.pincode || ''}\n\n`;
+    message += 'मला खरेदी करायची आहे:\n\n';
     
     cartTotals.items.forEach((item, index) => {
       const pricing = item.pricing;
