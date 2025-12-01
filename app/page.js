@@ -29,6 +29,11 @@ export default function Home() {
   const [selectedOffers, setSelectedOffers] = useState({}); // Track offer type: 'regular' or 'bulk'
   const [productQuantity, setProductQuantity] = useState(1); // Quantity for product detail page
   
+  // Delivery Address State
+  const [deliveryAddress, setDeliveryAddress] = useState(null);
+  const [showAddressDialog, setShowAddressDialog] = useState(false);
+  const [addressForm, setAddressForm] = useState({ name: '', address: '' });
+  
   // Live data from Supabase
   const [shopData, setShopData] = useState(null);
   const [products, setProducts] = useState([]);
