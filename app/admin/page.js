@@ -55,7 +55,12 @@ export default function AdminDashboard() {
       specialNotes: ''
     },
     featured: false,
-    searchKeywords: []
+    searchKeywords: [],
+    specialOffer: {
+      offerName: '',
+      quantity: '',
+      offerPricePerUnit: ''
+    }
   });
   const [editingProduct, setEditingProduct] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
