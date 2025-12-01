@@ -1169,7 +1169,12 @@ export default function AdminDashboard() {
                             specialNotes: ''
                           },
                           featured: false, 
-                          searchKeywords: [] 
+                          searchKeywords: [],
+                          specialOffer: {
+                            offerName: '',
+                            quantity: '',
+                            offerPricePerUnit: ''
+                          }
                         });
                         setEditingProduct(false);
                       }}
