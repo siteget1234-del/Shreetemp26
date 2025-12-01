@@ -262,23 +262,42 @@ export default function AdminDashboard() {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file size - max 3MB for products
-    const maxSize = 3 * 1024 * 1024; // 3MB in bytes
-    if (file.size > maxSize) {
-      showMessage('error', 'Product image must be less than 3MB');
-      e.target.value = ''; // Clear the input
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      showMessage('error', 'Please select a valid image file');
+      e.target.value = '';
       return;
     }
 
     setUploadingImage(true);
+    setCompressionProgress(null);
+    
     try {
-      const imageUrl = await uploadToCloudinary(file);
+      // Two-Step Compression
+      const compressedFile = await compressImageTwoStep(file, 'product', (progress) => {
+        setCompressionProgress(progress);
+      });
+
+      // Upload compressed image to Cloudinary
+      setCompressionProgress({ 
+        step: 3, 
+        message: 'Uploading to cloud...', 
+        progress: 95 
+      });
+      
+      const imageUrl = await uploadToCloudinary(compressedFile);
+      
       setProductForm(prev => ({ ...prev, image: imageUrl }));
-      showMessage('success', 'Image uploaded successfully!');
+      
+      showMessage('success', `Image compressed (${(compressedFile.size / 1024).toFixed(2)}KB) & uploaded!`);
+      setCompressionProgress(null);
     } catch (error) {
-      showMessage('error', 'Failed to upload image');
+      console.error('Image upload error:', error);
+      showMessage('error', 'Failed to compress/upload image');
+      setCompressionProgress(null);
     } finally {
       setUploadingImage(false);
+      e.target.value = ''; // Clear input
     }
   };
 
