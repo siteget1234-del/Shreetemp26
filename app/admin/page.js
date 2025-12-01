@@ -1346,30 +1346,30 @@ export default function AdminDashboard() {
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
               {/* Contextual Action Bar - appears in selection mode at top of container */}
               {isSelectionMode ? (
-                <div className="sticky top-0 z-10 bg-gradient-to-r from-red-600 to-red-700 text-white shadow-xl -mx-6 -mt-6 mb-4 px-6 py-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
+                <div className="sticky top-0 z-10 bg-gradient-to-r from-red-600 to-red-700 text-white shadow-xl mb-4 px-4 py-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center space-x-2 min-w-0">
                       <button
                         onClick={handleCancelSelection}
-                        className="hover:bg-red-800 p-1.5 rounded-full transition"
+                        className="hover:bg-red-800 p-1.5 rounded-full transition flex-shrink-0"
                       >
                         <X className="w-5 h-5" />
                       </button>
-                      <h3 className="text-base font-semibold">
+                      <h3 className="text-base font-semibold whitespace-nowrap">
                         {selectedProducts.length} Selected
                       </h3>
                     </div>
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 flex-shrink-0">
                       <button
                         onClick={handleSelectAllProducts}
-                        className="bg-red-800 hover:bg-red-900 px-3 py-1.5 rounded-lg font-semibold transition text-sm"
+                        className="bg-red-800 hover:bg-red-900 px-2.5 py-1.5 rounded-lg font-semibold transition text-sm whitespace-nowrap"
                       >
                         {selectedProducts.length === shopData.products.length ? 'Deselect All' : 'Select All'}
                       </button>
                       <button
                         onClick={handleDeleteMultiple}
                         disabled={saving}
-                        className="bg-white text-red-600 hover:bg-gray-100 font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 disabled:opacity-50 text-sm"
+                        className="bg-white text-red-600 hover:bg-gray-100 font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1.5 disabled:opacity-50 text-sm whitespace-nowrap"
                         data-testid="delete-selected-btn"
                       >
                         <Trash2 className="w-4 h-4" />
