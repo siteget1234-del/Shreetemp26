@@ -733,11 +733,45 @@ export default function Home() {
                       </div>
                     )}
                     
+                    {/* Special Offer Section */}
+                    {product.specialOffer?.offerName && product.specialOffer?.quantity && product.specialOffer?.offerPricePerUnit && (
+                      <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-300 rounded-lg px-2 py-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <div className="flex items-center space-x-1">
+                            <span className="text-base">🎁</span>
+                            <span className="text-xs font-bold text-orange-700">{product.specialOffer.offerName}</span>
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedOffers(prev => ({
+                                ...prev,
+                                [product.id]: !prev[product.id]
+                              }));
+                            }}
+                            className={`relative inline-flex h-5 w-9 items-center rounded-full transition ${
+                              selectedOffers[product.id] ? 'bg-orange-600' : 'bg-gray-300'
+                            }`}
+                            data-testid={`offer-toggle-${product.id}`}
+                          >
+                            <span
+                              className={`inline-block h-3 w-3 transform rounded-full bg-white transition ${
+                                selectedOffers[product.id] ? 'translate-x-5' : 'translate-x-1'
+                              }`}
+                            />
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-orange-600">
+                          {product.specialOffer.quantity} युनिट्स @ ₹{product.specialOffer.offerPricePerUnit}/युनिट
+                        </p>
+                      </div>
+                    )}
+                    
                     {/* Buy Now Button - Full Width Dark Green */}
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        addToCart(product);
+                        addToCart(product, selectedOffers[product.id]);
                         setShowCart(true);
                       }}
                       className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 rounded-lg transition-all duration-200 shadow-md"
