@@ -1254,11 +1254,25 @@ export default function Home() {
                 </div>
                 <button
                   onClick={handleWhatsAppCheckout}
-                  className="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-4 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg"
+                  disabled={!deliveryAddress}
+                  className={`w-full font-bold py-4 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg ${
+                    deliveryAddress 
+                      ? 'bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white' 
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
                   data-testid="whatsapp-order-btn"
                 >
-                  <span className="text-lg">ऑर्डर करा</span>
-                  <span className="text-xl">💬</span>
+                  {deliveryAddress ? (
+                    <>
+                      <span className="text-lg">ऑर्डर करा</span>
+                      <span className="text-xl">💬</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-lg">🔒</span>
+                      <span className="text-lg">ऑर्डर करा (पत्ता आवश्यक)</span>
+                    </>
+                  )}
                 </button>
               </div>
             )}
