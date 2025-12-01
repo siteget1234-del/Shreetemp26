@@ -32,7 +32,13 @@ export default function Home() {
   // Delivery Address State
   const [deliveryAddress, setDeliveryAddress] = useState(null);
   const [showAddressDialog, setShowAddressDialog] = useState(false);
-  const [addressForm, setAddressForm] = useState({ name: '', address: '' });
+  const [addressForm, setAddressForm] = useState({ 
+    name: '', 
+    addressLine: '', 
+    cityVillage: '', 
+    state: 'महाराष्ट्र', 
+    pincode: '' 
+  });
   
   // Live data from Supabase
   const [shopData, setShopData] = useState(null);
