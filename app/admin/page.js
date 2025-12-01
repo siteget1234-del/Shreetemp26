@@ -515,7 +515,12 @@ export default function AdminDashboard() {
           specialNotes: ''
         },
         featured: false, 
-        searchKeywords: [] 
+        searchKeywords: [],
+        specialOffer: {
+          offerName: '',
+          quantity: '',
+          offerPricePerUnit: ''
+        }
       });
       setEditingProduct(false);
       showMessage('success', editingProduct ? 'Product updated in queue!' : 'Product added to queue! Click "Save All" to commit.');
