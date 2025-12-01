@@ -330,6 +330,43 @@ export default function Home() {
                 </div>
               </div>
             )}
+
+            {/* Special Bulk Offer */}
+            {selectedProduct.specialOffer?.offerName && selectedProduct.specialOffer?.quantity && selectedProduct.specialOffer?.offerPricePerUnit && (
+              <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-300 rounded-lg p-4 flex items-start space-x-3">
+                <span className="text-3xl">🎁</span>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-base font-bold text-orange-800">{selectedProduct.specialOffer.offerName}</p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedOffers(prev => ({
+                          ...prev,
+                          [selectedProduct.id]: !prev[selectedProduct.id]
+                        }));
+                      }}
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition ${
+                        selectedOffers[selectedProduct.id] ? 'bg-orange-600' : 'bg-gray-300'
+                      }`}
+                      data-testid="detail-offer-toggle"
+                    >
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${
+                          selectedOffers[selectedProduct.id] ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  <p className="text-sm text-orange-700 font-semibold">
+                    {selectedProduct.specialOffer.quantity} युनिट्स फक्त ₹{selectedProduct.specialOffer.offerPricePerUnit}/युनिट मध्ये
+                  </p>
+                  <p className="text-xs text-orange-600 mt-1">
+                    एकूण: ₹{selectedProduct.specialOffer.quantity * selectedProduct.specialOffer.offerPricePerUnit} (नियमित किंमत: ₹{selectedProduct.specialOffer.quantity * selectedProduct.price})
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Video Section */}
