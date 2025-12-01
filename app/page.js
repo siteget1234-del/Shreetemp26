@@ -452,20 +452,14 @@ export default function Home() {
                   {/* Option 2: Bulk Offer */}
                   <button
                     onClick={() => {
-                      if (productQuantity >= selectedProduct.specialOffer.quantity) {
-                        setSelectedOffers(prev => ({ ...prev, [selectedProduct.id]: 'bulk' }));
-                      }
+                      setSelectedOffers(prev => ({ ...prev, [selectedProduct.id]: 'bulk' }));
+                      setProductQuantity(selectedProduct.specialOffer.quantity); // Auto-set quantity to bulkRequiredQty
                     }}
-                    disabled={productQuantity < selectedProduct.specialOffer.quantity}
                     className={`w-full text-left rounded-lg p-3 border-2 transition ${
                       currentOfferType === 'bulk' 
                         ? 'bg-emerald-50 border-emerald-500 shadow-md' 
                         : 'bg-white border-orange-200'
-                    } ${
-                      productQuantity < selectedProduct.specialOffer.quantity 
-                        ? 'cursor-not-allowed opacity-50' 
-                        : 'cursor-pointer hover:border-emerald-400'
-                    }`}
+                    } cursor-pointer hover:border-emerald-400`}
                     data-testid="offer-radio-bulk"
                   >
                     <div className="flex items-center justify-between">
