@@ -466,7 +466,7 @@ export default function Home() {
           <div className="container mx-auto px-4 py-3">
             <button
               onClick={() => {
-                addToCart(selectedProduct);
+                addToCart(selectedProduct, selectedOffers[selectedProduct.id]);
                 setShowCart(true);
               }}
               className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-4 rounded-xl transition-all duration-200 shadow-lg flex items-center justify-center space-x-2"
