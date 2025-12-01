@@ -211,11 +211,16 @@ export default function Home() {
         if (item.id === productId) {
           // Auto-adjust offer type based on quantity
           const product = products.find(p => p.id === productId);
-          const batchSize = product?.specialOffer?.quantity || 0;
+          const bulkRequiredQty = product?.specialOffer?.quantity || 0;
           
-          // If quantity drops to 1 and batch size > 1, auto-select regular
           let adjustedOfferType = item.offerType;
-          if (newQuantity === 1 && batchSize > 1) {
+          
+          // Auto-select bulk if quantity >= bulkRequiredQty
+          if (bulkRequiredQty > 0 && newQuantity >= bulkRequiredQty) {
+            adjustedOfferType = 'bulk';
+          } 
+          // Auto-select regular if quantity < bulkRequiredQty
+          else if (bulkRequiredQty > 0 && newQuantity < bulkRequiredQty) {
             adjustedOfferType = 'regular';
           }
           
@@ -224,6 +229,22 @@ export default function Home() {
         return item;
       }));
     }
+  };
+  
+  // Update cart item offer type and adjust quantity accordingly
+  const updateCartOfferType = (productId, offerType) => {
+    setCart(cart.map(item => {
+      if (item.id === productId) {
+        const product = products.find(p => p.id === productId);
+        const bulkRequiredQty = product?.specialOffer?.quantity || 1;
+        
+        // Set quantity based on offer type
+        const newQuantity = offerType === 'bulk' ? bulkRequiredQty : 1;
+        
+        return { ...item, quantity: newQuantity, offerType };
+      }
+      return item;
+    }));
   };
 
   // Calculate cart total using new algorithm
