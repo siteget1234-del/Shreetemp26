@@ -25,6 +25,10 @@ export default function AdminDashboard() {
 
   // Pending Products Queue (from Local Storage)
   const [pendingProducts, setPendingProducts] = useState([]);
+  
+  // Multiple select state
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedPendingProducts, setSelectedPendingProducts] = useState([]);
 
   // Predefined Categories
   const PREDEFINED_CATEGORIES = [
