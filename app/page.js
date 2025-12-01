@@ -1058,6 +1058,36 @@ export default function Home() {
               </button>
             </div>
 
+            {/* Address Section */}
+            <div className="p-4 border-b-2 border-gray-200 bg-gray-50">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center space-x-2">
+                  <span className="text-xl">📍</span>
+                  <h3 className="font-bold text-gray-800">आपला डिलिव्हरी पत्ता</h3>
+                </div>
+                <button
+                  onClick={deliveryAddress ? handleEditAddress : () => setShowAddressDialog(true)}
+                  className="text-emerald-700 hover:text-emerald-800 font-bold text-sm flex items-center space-x-1"
+                  data-testid="add-address-btn"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>{deliveryAddress ? 'पत्ता बदला' : 'पत्ता जोडा'}</span>
+                </button>
+              </div>
+              
+              {deliveryAddress ? (
+                <div className="bg-white rounded-lg p-3 border border-gray-200" data-testid="address-display">
+                  <p className="font-bold text-gray-800 text-sm">{deliveryAddress.name}</p>
+                  <p className="text-gray-600 text-xs mt-1">{deliveryAddress.address}</p>
+                </div>
+              ) : (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-start space-x-2" data-testid="address-error">
+                  <span className="text-red-500 text-lg">⚠️</span>
+                  <p className="text-red-700 text-sm font-semibold">कृपया डिलिव्हरी पत्ता जोडा</p>
+                </div>
+              )}
+            </div>
+
             <div className="flex-1 overflow-y-auto p-4">
               {cart.length === 0 ? (
                 <div className="text-center py-16">
