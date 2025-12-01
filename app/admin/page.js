@@ -1671,20 +1671,50 @@ export default function AdminDashboard() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Banner Image * (Max 200KB)</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Banner Image * (Target: ≤50KB)</label>
                   <div className="space-y-3">
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleBannerImageUpload}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                      disabled={uploadingBannerImage}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
                     />
-                    {uploadingBannerImage && (
-                      <div className="flex items-center space-x-2 text-emerald-600">
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-emerald-600"></div>
-                        <span className="text-sm">Uploading banner image...</span>
+                    
+                    {/* Banner Compression Progress Indicator */}
+                    {uploadingBannerImage && bannerCompressionProgress && (
+                      <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-semibold text-purple-800">
+                            {bannerCompressionProgress.step === 1 ? '⚡ Step 1: Fast Compression' : 
+                             bannerCompressionProgress.step === 2 ? '🎯 Step 2: Precise Compression' : 
+                             bannerCompressionProgress.step === 3 ? '☁️ Uploading...' : 
+                             '🔄 Processing...'}
+                          </span>
+                          {bannerCompressionProgress.progress && (
+                            <span className="text-xs font-bold text-purple-600">
+                              {Math.round(bannerCompressionProgress.progress)}%
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-xs text-purple-700">{bannerCompressionProgress.message}</p>
+                        {bannerCompressionProgress.progress && (
+                          <div className="w-full bg-purple-200 rounded-full h-2 overflow-hidden">
+                            <div 
+                              className="bg-purple-600 h-2 rounded-full transition-all duration-300"
+                              style={{ width: `${bannerCompressionProgress.progress}%` }}
+                            ></div>
+                          </div>
+                        )}
+                        {bannerCompressionProgress.originalSize && (
+                          <p className="text-xs text-gray-600">
+                            Original: {bannerCompressionProgress.originalSize}KB
+                            {bannerCompressionProgress.finalSize && ` → Compressed: ${bannerCompressionProgress.finalSize}KB`}
+                          </p>
+                        )}
                       </div>
                     )}
+                    
                     {bannerForm.image && (
                       <div className="relative w-full h-48">
                         <img src={bannerForm.image} alt="Banner Preview" className="w-full h-full object-cover rounded-lg" />
