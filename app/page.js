@@ -304,13 +304,24 @@ export default function Home() {
   };
 
   const handleSaveAddress = () => {
-    if (!addressForm.name.trim() || !addressForm.address.trim()) {
-      alert('कृपया नाव आणि पत्ता भरा!');
+    if (!addressForm.name.trim() || !addressForm.addressLine.trim() || 
+        !addressForm.cityVillage.trim() || !addressForm.pincode.trim()) {
+      alert('कृपया सर्व फील्ड भरा!');
       return;
     }
+    
+    // Validate pincode (6 digits)
+    if (!/^\d{6}$/.test(addressForm.pincode.trim())) {
+      alert('कृपया योग्य ६ अंकी पिनकोड भरा!');
+      return;
+    }
+    
     setDeliveryAddress({
       name: addressForm.name.trim(),
-      address: addressForm.address.trim()
+      addressLine: addressForm.addressLine.trim(),
+      cityVillage: addressForm.cityVillage.trim(),
+      state: addressForm.state.trim(),
+      pincode: addressForm.pincode.trim()
     });
     setShowAddressDialog(false);
   };
@@ -318,7 +329,10 @@ export default function Home() {
   const handleEditAddress = () => {
     setAddressForm({
       name: deliveryAddress?.name || '',
-      address: deliveryAddress?.address || ''
+      addressLine: deliveryAddress?.addressLine || '',
+      cityVillage: deliveryAddress?.cityVillage || '',
+      state: deliveryAddress?.state || 'महाराष्ट्र',
+      pincode: deliveryAddress?.pincode || ''
     });
     setShowAddressDialog(true);
   };
