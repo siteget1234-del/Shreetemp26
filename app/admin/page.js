@@ -1480,7 +1480,7 @@ export default function AdminDashboard() {
                             className={`border rounded-lg p-3 transition relative select-none ${
                               selectedProducts.includes(product.id) 
                                 ? 'border-red-500 bg-red-50 border-2 shadow-lg' 
-                                : 'border-gray-200 hover:shadow-lg cursor-pointer'
+                                : 'border-gray-200 hover:shadow-lg'
                             } ${isSelectionMode ? 'cursor-pointer' : ''}`}
                             onMouseDown={(e) => {
                               if (!isSelectionMode && e.target.tagName !== 'BUTTON' && !e.target.closest('button')) {
