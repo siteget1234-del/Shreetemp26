@@ -622,6 +622,82 @@ export default function AdminDashboard() {
     }
   };
 
+  // Multiple select handlers
+  const handleSelectProduct = (productId, isPending = false) => {
+    if (isPending) {
+      setSelectedPendingProducts(prev => 
+        prev.includes(productId) 
+          ? prev.filter(id => id !== productId)
+          : [...prev, productId]
+      );
+    } else {
+      setSelectedProducts(prev => 
+        prev.includes(productId) 
+          ? prev.filter(id => id !== productId)
+          : [...prev, productId]
+      );
+    }
+  };
+
+  const handleSelectAllProducts = (isPending = false) => {
+    if (isPending) {
+      if (selectedPendingProducts.length === pendingProducts.length) {
+        setSelectedPendingProducts([]);
+      } else {
+        setSelectedPendingProducts(pendingProducts.map(p => p.id));
+      }
+    } else {
+      if (selectedProducts.length === shopData.products.length) {
+        setSelectedProducts([]);
+      } else {
+        setSelectedProducts(shopData.products.map(p => p.id));
+      }
+    }
+  };
+
+  const handleDeleteMultiple = async () => {
+    const totalToDelete = selectedProducts.length + selectedPendingProducts.length;
+    if (totalToDelete === 0) {
+      showMessage('error', 'Please select at least one product to delete');
+      return;
+    }
+
+    if (!confirm(`Are you sure you want to delete ${totalToDelete} product(s)?`)) return;
+
+    setSaving(true);
+    try {
+      // Delete pending products from localStorage
+      if (selectedPendingProducts.length > 0) {
+        selectedPendingProducts.forEach(productId => {
+          removePendingProductFromStorage(productId);
+        });
+        setSelectedPendingProducts([]);
+      }
+
+      // Delete saved products from Supabase
+      if (selectedProducts.length > 0) {
+        const updatedProducts = shopData.products.filter(p => !selectedProducts.includes(p.id));
+
+        const { error } = await supabase
+          .from('shop_data')
+          .update({ products: updatedProducts, updated_at: new Date().toISOString() })
+          .eq('admin_id', user.id);
+
+        if (error) throw error;
+
+        setShopData(prev => ({ ...prev, products: updatedProducts }));
+        setSelectedProducts([]);
+      }
+
+      showMessage('success', `${totalToDelete} product(s) deleted successfully!`);
+    } catch (error) {
+      console.error('Error deleting products:', error);
+      showMessage('error', 'Failed to delete some products');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleBannerImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
