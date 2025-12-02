@@ -609,7 +609,6 @@ export default function AdminDashboard() {
         price: parseFloat(productForm.price),
         mrp: productForm.mrp ? parseFloat(productForm.mrp) : null,
         offer: productForm.offer || '',
-        description: productForm.description,
         category: productForm.category,
         image: productForm.image,
         videoUrl: productForm.videoUrl || '',
