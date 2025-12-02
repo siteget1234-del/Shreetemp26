@@ -1060,15 +1060,29 @@ export default function AdminDashboard() {
                     />
                   </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">MRP (किरकोळ किंमत)</label>
-                  <input
-                    type="number"
-                    value={productForm.mrp}
-                    onChange={(e) => setProductForm(prev => ({ ...prev, mrp: e.target.value }))}
-                    placeholder="₹ MRP (strikethrough साठी)"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Product Quantity (स्टॉक प्रमाण) *</label>
+                    <input
+                      type="number"
+                      value={productForm.stockQuantity}
+                      onChange={(e) => setProductForm(prev => ({ ...prev, stockQuantity: e.target.value }))}
+                      placeholder="स्टॉकमधील प्रमाण (उदा: 100)"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                      min="0"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Available stock for this product</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">MRP (किरकोळ किंमत)</label>
+                    <input
+                      type="number"
+                      value={productForm.mrp}
+                      onChange={(e) => setProductForm(prev => ({ ...prev, mrp: e.target.value }))}
+                      placeholder="₹ MRP (strikethrough साठी)"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    />
+                  </div>
                 </div>
                 
                 {/* Special Offer Section - Moved here */}
