@@ -792,23 +792,39 @@ export default function AdminDashboard() {
     setBannerCompressionProgress(null);
     
     try {
-      // Two-Step Compression for Banner (≤50KB)
-      const compressedFile = await compressImageTwoStep(file, 'banner', (progress) => {
-        setBannerCompressionProgress(progress);
-      });
+      const fileSizeKB = file.size / 1024;
+      let fileToUpload = file;
+      
+      // Skip compression if banner is already under 50KB
+      if (fileSizeKB < 50) {
+        setBannerCompressionProgress({ 
+          step: 1, 
+          message: `Banner already optimized (${fileSizeKB.toFixed(2)}KB). Skipping compression...`, 
+          progress: 50 
+        });
+      } else {
+        // Two-Step Compression for Banner (≤50KB)
+        fileToUpload = await compressImageTwoStep(file, 'banner', (progress) => {
+          setBannerCompressionProgress(progress);
+        });
+      }
 
-      // Upload compressed image to Cloudinary
+      // Upload image to Cloudinary
       setBannerCompressionProgress({ 
         step: 3, 
         message: 'Uploading to cloud...', 
         progress: 95 
       });
       
-      const imageUrl = await uploadToCloudinary(compressedFile);
+      const imageUrl = await uploadToCloudinary(fileToUpload);
       
       setBannerForm(prev => ({ ...prev, image: imageUrl }));
       
-      showMessage('success', `Banner compressed (${(compressedFile.size / 1024).toFixed(2)}KB) & uploaded!`);
+      if (fileSizeKB < 50) {
+        showMessage('success', `Banner uploaded (${fileSizeKB.toFixed(2)}KB - no compression needed)!`);
+      } else {
+        showMessage('success', `Banner compressed (${(fileToUpload.size / 1024).toFixed(2)}KB) & uploaded!`);
+      }
       setBannerCompressionProgress(null);
     } catch (error) {
       console.error('Banner upload error:', error);
