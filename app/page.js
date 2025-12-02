@@ -136,6 +136,17 @@ export default function Home() {
     fetchShopData();
   }, []);
 
+  // Close share menu on click outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showShareMenu && !event.target.closest('[data-testid="share-icon"]') && !event.target.closest('.absolute')) {
+        setShowShareMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showShareMenu]);
+
   const fetchShopData = async () => {
     try {
       setLoading(true);
