@@ -863,60 +863,6 @@ export default function AdminDashboard() {
     e.target.value = ''; // Clear input
   };
 
-  const handleBannerCropComplete = async (croppedBlob) => {
-    setShowCropModal(false);
-    setUploadingBannerImage(true);
-    setBannerCompressionProgress(null);
-    
-    try {
-      // Convert blob to file
-      const croppedFile = new File([croppedBlob], cropFile.name, { type: 'image/jpeg' });
-      
-      const fileSizeKB = croppedFile.size / 1024;
-      let fileToUpload = croppedFile;
-      
-      // Skip compression if banner is already under 50KB
-      if (fileSizeKB < 50) {
-        setBannerCompressionProgress({ 
-          step: 1, 
-          message: `Banner already optimized (${fileSizeKB.toFixed(2)}KB). Skipping compression...`, 
-          progress: 50 
-        });
-      } else {
-        // Two-Step Compression for Banner (≤50KB)
-        fileToUpload = await compressImageTwoStep(croppedFile, 'banner', (progress) => {
-          setBannerCompressionProgress(progress);
-        });
-      }
-
-      // Upload image to Cloudinary
-      setBannerCompressionProgress({ 
-        step: 3, 
-        message: 'Uploading to cloud...', 
-        progress: 95 
-      });
-      
-      const imageUrl = await uploadToCloudinary(fileToUpload);
-      
-      setBannerForm(prev => ({ ...prev, image: imageUrl }));
-      
-      if (fileSizeKB < 50) {
-        showMessage('success', `Banner cropped & uploaded (${fileSizeKB.toFixed(2)}KB)!`);
-      } else {
-        showMessage('success', `Banner cropped, compressed (${(fileToUpload.size / 1024).toFixed(2)}KB) & uploaded!`);
-      }
-      setBannerCompressionProgress(null);
-    } catch (error) {
-      console.error('Banner upload error:', error);
-      showMessage('error', 'Failed to compress/upload banner image');
-      setBannerCompressionProgress(null);
-    } finally {
-      setUploadingBannerImage(false);
-      setCropFile(null);
-      setCropType(null);
-    }
-  };
-
   const handleAddBanner = async () => {
     if (!bannerForm.image) {
       showMessage('error', 'Please upload a banner image');
