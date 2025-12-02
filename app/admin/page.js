@@ -1889,10 +1889,10 @@ export default function AdminDashboard() {
                     {/* Import Button */}
                     <button
                       onClick={() => setShowImportModal(true)}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-lg transition flex items-center space-x-2"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-2 rounded-lg transition flex items-center space-x-1.5 text-sm"
                       data-testid="import-products-btn"
                     >
-                      <FileUp className="w-5 h-5" />
+                      <FileUp className="w-4 h-4" />
                       <span>Import</span>
                     </button>
                     
@@ -1900,10 +1900,10 @@ export default function AdminDashboard() {
                     <button
                       onClick={handleExportProducts}
                       disabled={shopData.products.length === 0}
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-lg transition flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-3 py-2 rounded-lg transition flex items-center space-x-1.5 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                       data-testid="export-products-btn"
                     >
-                      <Download className="w-5 h-5" />
+                      <Download className="w-4 h-4" />
                       <span>Export</span>
                     </button>
                     
