@@ -1888,12 +1888,33 @@ export default function AdminDashboard() {
                       Saved: {shopData.products.length} | Pending: {pendingProducts.length}
                     </p>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-3">
+                    {/* Import Button */}
+                    <button
+                      onClick={() => setShowImportModal(true)}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-lg transition flex items-center space-x-2"
+                      data-testid="import-products-btn"
+                    >
+                      <FileUp className="w-5 h-5" />
+                      <span>Import</span>
+                    </button>
+                    
+                    {/* Export Button */}
+                    <button
+                      onClick={handleExportProducts}
+                      disabled={shopData.products.length === 0}
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-5 py-2.5 rounded-lg transition flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      data-testid="export-products-btn"
+                    >
+                      <Download className="w-5 h-5" />
+                      <span>Export</span>
+                    </button>
+                    
                     {pendingProducts.length > 0 && (
                       <button
                         onClick={handleBulkSaveProducts}
                         disabled={saving}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-lg transition flex items-center space-x-2 disabled:opacity-50"
+                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg transition flex items-center space-x-2 disabled:opacity-50"
                         data-testid="save-all-btn"
                       >
                         <Save className="w-5 h-5" />
