@@ -160,7 +160,18 @@ export default function Home() {
       if (error) throw error;
       
       if (data) {
-        setShopData(data);
+        // Parse social_links from JSON string if needed
+        let parsedData = { ...data };
+        if (data.social_links && typeof data.social_links === 'string') {
+          try {
+            parsedData.social_links = JSON.parse(data.social_links);
+          } catch (e) {
+            console.error('Error parsing social_links:', e);
+            parsedData.social_links = { instagram: '', facebook: '', youtube: '' };
+          }
+        }
+        
+        setShopData(parsedData);
         setProducts(data.products || []);
         setBanners(data.banners || []);
       }
