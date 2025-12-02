@@ -1995,6 +1995,17 @@ export default function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Crop Modal */}
+      {showCropModal && cropFile && (
+        <CropModal
+          file={cropFile}
+          aspectRatio={cropType === 'product' ? 4 / 3 : 16 / 9}
+          title={cropType === 'product' ? 'Crop Product Image (4:3 ratio)' : 'Crop Banner Image (16:9 ratio)'}
+          onCropComplete={handleCropComplete}
+          onCancel={handleCropCancel}
+        />
+      )}
     </div>
   );
 }
