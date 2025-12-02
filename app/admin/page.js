@@ -2412,6 +2412,141 @@ export default function AdminDashboard() {
       </div>
 
       {/* Crop Modal */}
+      {/* Import Products Modal */}
+      {showImportModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-6 rounded-t-xl">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <FileUp className="w-6 h-6" />
+                  <h2 className="text-2xl font-bold">Import Products from CSV</h2>
+                </div>
+                <button
+                  onClick={() => {
+                    setShowImportModal(false);
+                    setImportFile(null);
+                  }}
+                  className="hover:bg-white/20 p-2 rounded-full transition"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Instructions */}
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+                <h3 className="font-bold text-blue-900 mb-3 flex items-center space-x-2">
+                  <span>📋</span>
+                  <span>Important Instructions</span>
+                </h3>
+                <ul className="space-y-2 text-sm text-blue-800">
+                  <li className="flex items-start space-x-2">
+                    <span className="font-bold mt-0.5">1.</span>
+                    <span>Download the sample CSV file below to understand the correct format</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="font-bold mt-0.5">2.</span>
+                    <span>Fill in your product data following the same column structure</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="font-bold mt-0.5">3.</span>
+                    <span className="font-semibold">⚠️ CRITICAL: Product image links MUST point to images under 20KB in size</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="font-bold mt-0.5">4.</span>
+                    <span>Images larger than 20KB will cause upload issues and may be rejected</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="font-bold mt-0.5">5.</span>
+                    <span>Use services like TinyPNG or Cloudinary to compress images before uploading</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="font-bold mt-0.5">6.</span>
+                    <span>Required fields: <strong>name, price, category</strong></span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="font-bold mt-0.5">7.</span>
+                    <span>If a product ID already exists, it will be <strong>updated</strong> with new data</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="font-bold mt-0.5">8.</span>
+                    <span>Products will be saved <strong>directly to the database</strong></span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Download Sample CSV */}
+              <div className="border-2 border-gray-200 rounded-lg p-4">
+                <h3 className="font-bold text-gray-900 mb-3">Step 1: Download Sample CSV</h3>
+                <button
+                  onClick={handleDownloadSampleCSV}
+                  className="w-full bg-gray-100 hover:bg-gray-200 border-2 border-gray-300 text-gray-800 font-semibold px-4 py-3 rounded-lg transition flex items-center justify-center space-x-2"
+                >
+                  <Download className="w-5 h-5" />
+                  <span>Download Sample CSV Template</span>
+                </button>
+                <p className="text-xs text-gray-500 mt-2">
+                  This file contains one sample product with all fields populated correctly
+                </p>
+              </div>
+
+              {/* Upload CSV */}
+              <div className="border-2 border-emerald-200 rounded-lg p-4 bg-emerald-50">
+                <h3 className="font-bold text-gray-900 mb-3">Step 2: Upload Your CSV File</h3>
+                <input
+                  type="file"
+                  accept=".csv"
+                  onChange={(e) => setImportFile(e.target.files[0])}
+                  className="w-full px-4 py-3 border-2 border-emerald-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white"
+                />
+                {importFile && (
+                  <p className="text-sm text-emerald-700 mt-2 font-semibold">
+                    ✓ Selected: {importFile.name}
+                  </p>
+                )}
+              </div>
+
+              {/* Warning */}
+              <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4">
+                <h3 className="font-bold text-red-900 mb-2 flex items-center space-x-2">
+                  <span>⚠️</span>
+                  <span>Warning</span>
+                </h3>
+                <p className="text-sm text-red-800">
+                  Make sure all image URLs in your CSV point to compressed images (under 20KB). 
+                  Large images will slow down your shop and may cause failures. 
+                  We recommend uploading images through the normal product form which automatically compresses them.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex items-center space-x-3 pt-4">
+                <button
+                  onClick={handleImportProducts}
+                  disabled={!importFile || importing}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg transition flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Upload className="w-5 h-5" />
+                  <span>{importing ? 'Importing...' : 'Import Products'}</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setShowImportModal(false);
+                    setImportFile(null);
+                  }}
+                  disabled={importing}
+                  className="px-6 bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-3 rounded-lg transition disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showCropModal && cropFile && (
         <CropModal
           file={cropFile}
