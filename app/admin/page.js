@@ -296,12 +296,24 @@ export default function AdminDashboard() {
       return;
     }
 
+    // Open crop modal
+    setCropFile(file);
+    setCropType('product');
+    setShowCropModal(true);
+    e.target.value = ''; // Clear input
+  };
+
+  const handleCropComplete = async (croppedBlob) => {
+    setShowCropModal(false);
     setUploadingImage(true);
     setCompressionProgress(null);
     
     try {
-      const fileSizeKB = file.size / 1024;
-      let fileToUpload = file;
+      // Convert blob to file
+      const croppedFile = new File([croppedBlob], cropFile.name, { type: 'image/jpeg' });
+      
+      const fileSizeKB = croppedFile.size / 1024;
+      let fileToUpload = croppedFile;
       
       // Skip compression if image is already under 20KB
       if (fileSizeKB < 20) {
@@ -312,7 +324,7 @@ export default function AdminDashboard() {
         });
       } else {
         // Two-Step Compression
-        fileToUpload = await compressImageTwoStep(file, 'product', (progress) => {
+        fileToUpload = await compressImageTwoStep(croppedFile, 'product', (progress) => {
           setCompressionProgress(progress);
         });
       }
@@ -326,12 +338,16 @@ export default function AdminDashboard() {
       
       const imageUrl = await uploadToCloudinary(fileToUpload);
       
-      setProductForm(prev => ({ ...prev, image: imageUrl }));
+      if (cropType === 'product') {
+        setProductForm(prev => ({ ...prev, image: imageUrl }));
+      } else if (cropType === 'banner') {
+        setBannerForm(prev => ({ ...prev, image: imageUrl }));
+      }
       
       if (fileSizeKB < 20) {
-        showMessage('success', `Image uploaded (${fileSizeKB.toFixed(2)}KB - no compression needed)!`);
+        showMessage('success', `Image cropped & uploaded (${fileSizeKB.toFixed(2)}KB)!`);
       } else {
-        showMessage('success', `Image compressed (${(fileToUpload.size / 1024).toFixed(2)}KB) & uploaded!`);
+        showMessage('success', `Image cropped, compressed (${(fileToUpload.size / 1024).toFixed(2)}KB) & uploaded!`);
       }
       setCompressionProgress(null);
     } catch (error) {
@@ -340,8 +356,15 @@ export default function AdminDashboard() {
       setCompressionProgress(null);
     } finally {
       setUploadingImage(false);
-      e.target.value = ''; // Clear input
+      setCropFile(null);
+      setCropType(null);
     }
+  };
+
+  const handleCropCancel = () => {
+    setShowCropModal(false);
+    setCropFile(null);
+    setCropType(null);
   };
 
   // Generate search keywords for product - Rule-based expansion
