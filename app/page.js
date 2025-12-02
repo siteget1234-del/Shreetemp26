@@ -1107,12 +1107,16 @@ export default function Home() {
                       </div>
                     )}
                     
-                    {/* Special Offer Text */}
-                    {hasSpecialOffer && (
+                    {/* Special Offer Text or Discount */}
+                    {hasSpecialOffer ? (
                       <p className="text-xs font-bold text-red-600">
                         ऑफर किंमत ₹{product.specialOffer.offerPricePerUnit}/ प्रति नग
                       </p>
-                    )}
+                    ) : discountPercent ? (
+                      <p className="text-xs font-bold text-red-600" data-testid="product-discount">
+                        खास {discountPercent}% सूट
+                      </p>
+                    ) : null}
                     
                     {/* Buy Now Button - Full Width Dark Green */}
                     <button
