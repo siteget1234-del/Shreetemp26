@@ -514,6 +514,7 @@ export default function AdminDashboard() {
         category: productForm.category,
         image: productForm.image,
         videoUrl: productForm.videoUrl || '',
+        stockQuantity: productForm.stockQuantity ? parseInt(productForm.stockQuantity) : 0,
         specifications: productForm.specifications || {},
         featured: productForm.featured || false,
         searchKeywords: searchKeywords,
