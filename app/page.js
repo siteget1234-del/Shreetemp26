@@ -179,6 +179,20 @@ export default function Home() {
     }
   };
 
+  // Handle product URL parameter
+  useEffect(() => {
+    if (products.length > 0) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get('product');
+      if (productId) {
+        const product = products.find(p => p.id === productId);
+        if (product) {
+          setSelectedProduct(product);
+        }
+      }
+    }
+  }, [products]);
+
   // Auto-slide banners
   useEffect(() => {
     if (banners.length > 0) {
