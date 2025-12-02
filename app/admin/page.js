@@ -2507,11 +2507,11 @@ export default function AdminDashboard() {
                 <ul className="space-y-2 text-sm text-blue-800">
                   <li className="flex items-start space-x-2">
                     <span className="font-bold mt-0.5">1.</span>
-                    <span>Download the sample CSV file below to understand the correct format</span>
+                    <span><strong>Download the sample CSV</strong> - Contains ALL product fields including specifications (महत्वाचे गुणधर्म), special offers (विशेष ऑफर), pricing, and media</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="font-bold mt-0.5">2.</span>
-                    <span>Fill in your product data following the same column structure</span>
+                    <span>Fill in your product data following the same column structure - ALL columns are included</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="font-bold mt-0.5">3.</span>
@@ -2527,7 +2527,7 @@ export default function AdminDashboard() {
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="font-bold mt-0.5">6.</span>
-                    <span>Required fields: <strong>name, price, category</strong></span>
+                    <span>Required fields: <strong>name, price, category</strong> - All other fields are optional</span>
                   </li>
                   <li className="flex items-start space-x-2">
                     <span className="font-bold mt-0.5">7.</span>
