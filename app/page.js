@@ -1092,9 +1092,15 @@ export default function Home() {
               <button
                 key={category.slug}
                 onClick={() => setSelectedCategory(category.name)}
-                className="bg-white p-3 rounded-xl shadow-md hover:shadow-xl transition transform hover:scale-105 active:scale-95 flex flex-col items-center space-y-1 relative"
+                className="bg-white p-3 rounded-xl shadow-md hover:shadow-xl transition transform hover:scale-105 active:scale-95 flex flex-col items-center space-y-2 relative"
               >
-                <div className="text-3xl">{category.icon}</div>
+                <div className="w-12 h-12 flex items-center justify-center">
+                  <img 
+                    src={category.icon} 
+                    alt={category.name}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
                 <h3 className="text-xs font-semibold text-gray-800 text-center leading-tight">{category.name}</h3>
                 <span className={`text-[10px] font-bold ${category.count > 0 ? 'text-emerald-600' : 'text-gray-400'}`}>
                   {category.count > 0 ? `${category.count} उत्पादने` : '0 उत्पादने'}
