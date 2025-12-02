@@ -541,6 +541,7 @@ export default function AdminDashboard() {
         category: '', 
         image: '', 
         videoUrl: '', 
+        stockQuantity: '',
         specifications: {
           ingredients: '',
           quantity: '',
