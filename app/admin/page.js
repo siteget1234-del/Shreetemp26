@@ -209,7 +209,12 @@ export default function AdminDashboard() {
           shop_address: data.shop_address || '',
           social_links: socialLinks,
           products: data.products || [],
-          banners: data.banners || []
+          banners: data.banners || [],
+          overview: data.overview || {
+            totalViews: 0,
+            totalOrders: 0,
+            orderHistory: []
+          }
         });
       }
     } catch (error) {
