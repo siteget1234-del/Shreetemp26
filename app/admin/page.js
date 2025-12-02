@@ -179,11 +179,24 @@ export default function AdminDashboard() {
       if (error && error.code !== 'PGRST116') throw error;
       
       if (data) {
+        // Parse social_links from JSON string or set default
+        let socialLinks = { instagram: '', facebook: '', youtube: '' };
+        if (data.social_links) {
+          try {
+            socialLinks = typeof data.social_links === 'string' 
+              ? JSON.parse(data.social_links) 
+              : data.social_links;
+          } catch (e) {
+            console.error('Error parsing social_links:', e);
+          }
+        }
+        
         setShopData({
           id: data.id,
           shop_name: data.shop_name || '',
           shop_number: data.shop_number || '',
           shop_address: data.shop_address || '',
+          social_links: socialLinks,
           products: data.products || [],
           banners: data.banners || []
         });
