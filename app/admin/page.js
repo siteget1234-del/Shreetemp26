@@ -275,23 +275,39 @@ export default function AdminDashboard() {
     setCompressionProgress(null);
     
     try {
-      // Two-Step Compression
-      const compressedFile = await compressImageTwoStep(file, 'product', (progress) => {
-        setCompressionProgress(progress);
-      });
+      const fileSizeKB = file.size / 1024;
+      let fileToUpload = file;
+      
+      // Skip compression if image is already under 20KB
+      if (fileSizeKB < 20) {
+        setCompressionProgress({ 
+          step: 1, 
+          message: `Image already optimized (${fileSizeKB.toFixed(2)}KB). Skipping compression...`, 
+          progress: 50 
+        });
+      } else {
+        // Two-Step Compression
+        fileToUpload = await compressImageTwoStep(file, 'product', (progress) => {
+          setCompressionProgress(progress);
+        });
+      }
 
-      // Upload compressed image to Cloudinary
+      // Upload image to Cloudinary
       setCompressionProgress({ 
         step: 3, 
         message: 'Uploading to cloud...', 
         progress: 95 
       });
       
-      const imageUrl = await uploadToCloudinary(compressedFile);
+      const imageUrl = await uploadToCloudinary(fileToUpload);
       
       setProductForm(prev => ({ ...prev, image: imageUrl }));
       
-      showMessage('success', `Image compressed (${(compressedFile.size / 1024).toFixed(2)}KB) & uploaded!`);
+      if (fileSizeKB < 20) {
+        showMessage('success', `Image uploaded (${fileSizeKB.toFixed(2)}KB - no compression needed)!`);
+      } else {
+        showMessage('success', `Image compressed (${(fileToUpload.size / 1024).toFixed(2)}KB) & uploaded!`);
+      }
       setCompressionProgress(null);
     } catch (error) {
       console.error('Image upload error:', error);
