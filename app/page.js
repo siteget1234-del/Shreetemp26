@@ -10,10 +10,10 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/
 
 // Predefined Categories - Always show these 4
 const PREDEFINED_CATEGORIES = [
-  { name: 'बीज', icon: '🌱', slug: 'seeds' },
-  { name: 'पोषण', icon: '🌿', slug: 'nutrition' },
-  { name: 'संरक्षण', icon: '🛡️', slug: 'protection' },
-  { name: 'हार्डवेअर', icon: '🔧', slug: 'hardware' }
+  { name: 'बीज', icon: 'https://customer-assets.emergentagent.com/job_hello-445/artifacts/oi0luqpr_%E0%A4%AC%E0%A5%80%E0%A4%9C.webp', slug: 'seeds' },
+  { name: 'पोषण', icon: 'https://customer-assets.emergentagent.com/job_hello-445/artifacts/tpo7s5lq_%E0%A4%AA%E0%A5%8B%E0%A4%B7%E0%A4%A3.webp', slug: 'nutrition' },
+  { name: 'संरक्षण', icon: 'https://customer-assets.emergentagent.com/job_hello-445/artifacts/onoi9glj_%E0%A4%B8%E0%A4%82%E0%A4%B0%E0%A4%95%E0%A5%8D%E0%A4%B7%E0%A4%A3.webp', slug: 'protection' },
+  { name: 'हार्डवेअर', icon: 'https://customer-assets.emergentagent.com/job_hello-445/artifacts/afcl8knh_%E0%A4%B9%E0%A4%BE%E0%A4%B0%E0%A5%8D%E0%A4%A1%E0%A4%B5%E0%A5%87%E0%A4%85%E0%A4%B0.webp', slug: 'hardware' }
 ];
 
 export default function Home() {
