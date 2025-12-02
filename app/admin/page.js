@@ -1047,6 +1047,17 @@ export default function AdminDashboard() {
             <ImageIcon className="w-5 h-5" />
             <span>Banners ({shopData.banners.length})</span>
           </button>
+          <button
+            onClick={() => setActiveTab('overview')}
+            className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-semibold transition whitespace-nowrap ${
+              activeTab === 'overview' 
+                ? 'bg-emerald-600 text-white' 
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <BarChart3 className="w-5 h-5" />
+            <span>Overview</span>
+          </button>
         </div>
 
         {/* Profile Tab */}
