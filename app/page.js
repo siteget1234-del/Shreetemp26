@@ -28,6 +28,8 @@ export default function Home() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [selectedOffers, setSelectedOffers] = useState({}); // Track offer type: 'regular' or 'bulk'
   const [productQuantity, setProductQuantity] = useState(1); // Quantity for product detail page
+  const [showShareMenu, setShowShareMenu] = useState(false); // Share menu toggle
+  const [copySuccess, setCopySuccess] = useState(false); // Copy link feedback
   
   // Delivery Address State
   const [deliveryAddress, setDeliveryAddress] = useState(null);
