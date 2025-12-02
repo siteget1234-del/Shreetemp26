@@ -1951,7 +1951,6 @@ export default function AdminDashboard() {
                                     📦 Stock: {product.stockQuantity} units
                                   </p>
                                 )}
-                                <p className="text-sm text-gray-600 mb-2 line-clamp-2">{product.description}</p>
                                 <div className="flex items-center justify-between mb-2">
                                   <p className="text-xs text-gray-500">Category: {product.category}</p>
                                   {product.featured && (
