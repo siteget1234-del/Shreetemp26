@@ -6,6 +6,7 @@ import { supabase, getCurrentUser } from '@/lib/supabase';
 import { Store, Package, Image as ImageIcon, User, LogOut, Save, Plus, X, Edit2, Trash2, Upload } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { compressImageTwoStep } from '@/lib/imageCompression';
+import CropModal from '@/components/CropModal';
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -14,6 +15,11 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('profile');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
+  
+  // Crop Modal States
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [cropFile, setCropFile] = useState(null);
+  const [cropType, setCropType] = useState(null); // 'product' or 'banner'
 
   // Shop Data
   const [shopData, setShopData] = useState({
