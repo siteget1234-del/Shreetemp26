@@ -20,6 +20,11 @@ export default function AdminDashboard() {
     shop_name: '',
     shop_number: '',
     shop_address: '',
+    social_links: {
+      instagram: '',
+      facebook: '',
+      youtube: ''
+    },
     products: [],
     banners: []
   });
