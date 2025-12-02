@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase, getCurrentUser } from '@/lib/supabase';
 import { calculateOfferPricing, calculateCartTotal, formatDiscount } from '@/lib/offerCalculations';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 // Predefined Categories - Always show these 4
 const PREDEFINED_CATEGORIES = [
