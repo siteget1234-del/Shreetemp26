@@ -1003,6 +1003,107 @@ export default function AdminDashboard() {
     }
   };
 
+  // Blog Handlers
+  const handleBlogImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      showMessage('error', 'Please select a valid image file');
+      e.target.value = '';
+      return;
+    }
+
+    setUploadingBlogImage(true);
+    try {
+      // Upload directly without compression as per user requirement
+      const imageUrl = await uploadToCloudinary(file, false);
+      setBlogForm(prev => ({ ...prev, image: imageUrl }));
+      showMessage('success', 'Blog image uploaded!');
+    } catch (error) {
+      console.error('Blog image upload error:', error);
+      showMessage('error', 'Failed to upload blog image');
+    } finally {
+      setUploadingBlogImage(false);
+      e.target.value = '';
+    }
+  };
+
+  const handleAddBlog = async () => {
+    if (!blogForm.image || !blogForm.text) {
+      showMessage('error', 'Please upload an image and enter text');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const newBlog = {
+        id: editingBlog ? blogForm.id : uuidv4(),
+        image: blogForm.image,
+        text: blogForm.text,
+        createdAt: new Date().toISOString()
+      };
+
+      let updatedBlogs;
+      if (editingBlog) {
+        updatedBlogs = shopData.blogs.map(b => 
+          b.id === blogForm.id ? newBlog : b
+        );
+      } else {
+        updatedBlogs = [...shopData.blogs, newBlog];
+      }
+
+      const { error } = await supabase
+        .from('shop_data')
+        .update({ blogs: updatedBlogs, updated_at: new Date().toISOString() })
+        .eq('admin_id', user.id);
+
+      if (error) throw error;
+
+      setShopData(prev => ({ ...prev, blogs: updatedBlogs }));
+      setBlogForm({ id: '', image: '', text: '' });
+      setEditingBlog(false);
+      showMessage('success', editingBlog ? 'Blog updated!' : 'Blog added successfully!');
+    } catch (error) {
+      console.error('Error saving blog:', error);
+      showMessage('error', 'Failed to save blog');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleEditBlog = (blog) => {
+    setBlogForm(blog);
+    setEditingBlog(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleDeleteBlog = async (blogId) => {
+    if (!confirm('Are you sure you want to delete this blog?')) return;
+
+    setSaving(true);
+    try {
+      const updatedBlogs = shopData.blogs.filter(b => b.id !== blogId);
+
+      const { error } = await supabase
+        .from('shop_data')
+        .update({ blogs: updatedBlogs, updated_at: new Date().toISOString() })
+        .eq('admin_id', user.id);
+
+      if (error) throw error;
+
+      setShopData(prev => ({ ...prev, blogs: updatedBlogs }));
+      showMessage('success', 'Blog deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting blog:', error);
+      showMessage('error', 'Failed to delete blog');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+
   // Export Products to CSV
   const handleExportProducts = () => {
     if (shopData.products.length === 0) {
