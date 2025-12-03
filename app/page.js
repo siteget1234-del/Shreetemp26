@@ -1396,7 +1396,7 @@ export default function Home() {
 
       {/* Footer */}
       {!showSearch && !selectedCategory && (
-        <footer className="bg-emerald-700 text-white py-8 mt-12">
+        <footer className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 text-white py-8 mt-12 shadow-2xl">
           <div className="container mx-auto px-4">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold">आमच्याशी संपर्क साधा</h3>
