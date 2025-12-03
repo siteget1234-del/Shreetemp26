@@ -2542,12 +2542,66 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             {/* Add/Edit Blog Form */}
             <div className="bg-white rounded-xl shadow-md p-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">
-                {editingBlog ? 'Edit Blog' : 'Add New Blog'}
+              <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
+                <span>{editingBlog ? 'Edit Blog' : 'Add New Blog'}</span>
+                {editingBlog && (
+                  <span className="text-sm font-normal text-gray-500">(Editing)</span>
+                )}
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-6">
+                {/* Layout Selector */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Blog Image *</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-3 flex items-center space-x-2">
+                    <Layout className="w-4 h-4" />
+                    <span>Select Blog Layout *</span>
+                  </label>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {Object.entries(BLOG_LAYOUTS).map(([key, layout]) => (
+                      <button
+                        key={key}
+                        onClick={() => setBlogForm(prev => ({ ...prev, layout: key }))}
+                        className={`relative p-4 border-2 rounded-lg transition ${
+                          blogForm.layout === key
+                            ? 'border-emerald-500 bg-emerald-50'
+                            : 'border-gray-300 hover:border-emerald-300'
+                        }`}
+                      >
+                        {/* Layout Preview Box */}
+                        <div className="flex items-center justify-center mb-2">
+                          <div 
+                            className={`bg-gradient-to-br from-gray-300 to-gray-400 rounded ${
+                              blogForm.layout === key ? 'shadow-md' : ''
+                            }`}
+                            style={{ 
+                              width: '80px',
+                              height: `${80 / layout.aspect}px`
+                            }}
+                          />
+                        </div>
+                        <p className="text-xs font-semibold text-gray-800 text-center mb-1">{layout.name}</p>
+                        <p className="text-xs text-gray-600 text-center">{layout.description}</p>
+                        {blogForm.layout === key && (
+                          <div className="absolute top-2 right-2">
+                            <div className="w-5 h-5 bg-emerald-500 rounded-full flex items-center justify-center">
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          </div>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    💡 Choose a layout that matches your content style. Image will be cropped to fit the selected aspect ratio.
+                  </p>
+                </div>
+
+                {/* Blog Image Upload */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Blog Image * <span className="text-red-600 font-normal">(Max 200KB)</span>
+                  </label>
                   <div className="space-y-3">
                     <input
                       type="file"
@@ -2559,27 +2613,49 @@ export default function AdminDashboard() {
                     
                     {uploadingBlogImage && (
                       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p className="text-sm font-semibold text-blue-800">Uploading image...</p>
+                        <p className="text-sm font-semibold text-blue-800">📤 Uploading image...</p>
                       </div>
                     )}
                     
                     {blogForm.image && (
-                      <div className="relative w-full h-48">
-                        <img src={blogForm.image} alt="Blog Preview" className="w-full h-full object-cover rounded-lg" />
+                      <div className="relative rounded-lg overflow-hidden border-2 border-emerald-200">
+                        <div 
+                          className="relative w-full bg-gray-100"
+                          style={{ 
+                            paddingBottom: `${(1 / BLOG_LAYOUTS[blogForm.layout].aspect) * 100}%`
+                          }}
+                        >
+                          <img 
+                            src={blogForm.image} 
+                            alt="Blog Preview" 
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        </div>
+                        <button
+                          onClick={() => setBlogForm(prev => ({ ...prev, image: '' }))}
+                          className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg transition"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
                       </div>
                     )}
                   </div>
                 </div>
+
+                {/* Rich Text Editor */}
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Blog Text *</label>
-                  <textarea
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Blog Content * <span className="text-red-600 font-normal">(Max 1,500 characters)</span>
+                  </label>
+                  <RichTextEditor
                     value={blogForm.text}
-                    onChange={(e) => setBlogForm(prev => ({ ...prev, text: e.target.value }))}
-                    placeholder="Enter blog content..."
-                    rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+                    onChange={(content) => setBlogForm(prev => ({ ...prev, text: content }))}
+                    maxLength={1500}
+                    placeholder="Write your blog content with rich formatting..."
                   />
                 </div>
+
+                {/* Action Buttons */}
                 <div className="flex space-x-3">
                   <button
                     onClick={handleAddBlog}
@@ -2592,7 +2668,7 @@ export default function AdminDashboard() {
                   {editingBlog && (
                     <button
                       onClick={() => {
-                        setBlogForm({ id: '', image: '', text: '' });
+                        setBlogForm({ id: '', image: '', text: '', layout: 'standard' });
                         setEditingBlog(false);
                       }}
                       className="px-6 bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-3 rounded-lg transition"
@@ -2608,39 +2684,61 @@ export default function AdminDashboard() {
             <div className="bg-white rounded-xl shadow-md p-6">
               <h3 className="text-xl font-bold text-gray-800 mb-4">All Blogs ({shopData.blogs.length})</h3>
               {shopData.blogs.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">No blogs added yet</p>
+                <div className="text-center py-12">
+                  <ImageIcon className="w-16 h-16 text-gray-300 mx-auto mb-3" />
+                  <p className="text-gray-500 font-semibold">No blogs added yet</p>
+                  <p className="text-sm text-gray-400 mt-1">Create your first blog post to engage your customers</p>
+                </div>
               ) : (
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {shopData.blogs.map(blog => (
-                    <div key={blog.id} className="border border-gray-200 rounded-lg p-4 hover:shadow-lg transition">
-                      <div className="flex items-start space-x-4">
-                        <div className="relative w-32 h-32 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
-                          {blog.image ? (
-                            <img src={blog.image} alt="Blog" className="w-full h-full object-cover" />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-400">
-                              No image
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-sm text-gray-700 mb-3 line-clamp-3">{blog.text}</p>
-                          <div className="flex space-x-2">
-                            <button
-                              onClick={() => handleEditBlog(blog)}
-                              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center space-x-1 text-sm"
-                            >
-                              <Edit2 className="w-4 h-4" />
-                              <span>Edit</span>
-                            </button>
-                            <button
-                              onClick={() => handleDeleteBlog(blog.id)}
-                              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition flex items-center space-x-1 text-sm"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                              <span>Delete</span>
-                            </button>
+                    <div key={blog.id} className="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition">
+                      <div className="relative w-full bg-gray-100">
+                        {blog.image ? (
+                          <div 
+                            className="relative w-full"
+                            style={{ 
+                              paddingBottom: `${(1 / (BLOG_LAYOUTS[blog.layout || 'standard'].aspect)) * 100}%`
+                            }}
+                          >
+                            <img 
+                              src={blog.image} 
+                              alt="Blog" 
+                              className="absolute inset-0 w-full h-full object-cover"
+                            />
                           </div>
+                        ) : (
+                          <div className="w-full h-32 flex items-center justify-center text-gray-400">
+                            <ImageIcon className="w-8 h-8" />
+                          </div>
+                        )}
+                        {/* Layout Badge */}
+                        <div className="absolute top-2 left-2">
+                          <span className="bg-black/60 text-white text-xs font-semibold px-2 py-1 rounded">
+                            {BLOG_LAYOUTS[blog.layout || 'standard'].name}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="p-4">
+                        <div 
+                          className="text-sm text-gray-700 mb-3 line-clamp-2"
+                          dangerouslySetInnerHTML={{ __html: blog.text }}
+                        />
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => handleEditBlog(blog)}
+                            className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center justify-center space-x-1 text-sm font-semibold"
+                          >
+                            <Edit2 className="w-4 h-4" />
+                            <span>Edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteBlog(blog.id)}
+                            className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition flex items-center justify-center space-x-1 text-sm font-semibold"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            <span>Delete</span>
+                          </button>
                         </div>
                       </div>
                     </div>
