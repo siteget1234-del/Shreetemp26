@@ -1223,13 +1223,19 @@ export default function Home() {
                     
                     {/* Special Offer Text or Discount */}
                     {hasSpecialOffer ? (
-                      <p className="text-[10px] font-bold text-red-600">
-                        ऑफर किंमत ₹{product.specialOffer.offerPricePerUnit}/ प्रति नग
-                      </p>
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-emerald-300 rounded-lg px-2 py-1.5 flex items-center space-x-1.5">
+                        <span className="text-base">💰</span>
+                        <p className="text-[10px] font-bold text-emerald-800" data-testid="product-offer-price">
+                          ऑफर: ₹{product.specialOffer.offerPricePerUnit}/ प्रति नग
+                        </p>
+                      </div>
                     ) : discountPercent ? (
-                      <p className="text-[10px] font-bold text-red-600" data-testid="product-discount">
-                        खास {discountPercent}% सूट
-                      </p>
+                      <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-emerald-300 rounded-lg px-2 py-1.5 flex items-center space-x-1.5">
+                        <span className="text-base">💰</span>
+                        <p className="text-[10px] font-bold text-emerald-800" data-testid="product-discount">
+                          खास {discountPercent}% सूट
+                        </p>
+                      </div>
                     ) : null}
                     
                     {/* Buy Now Button - Full Width Dark Green */}
