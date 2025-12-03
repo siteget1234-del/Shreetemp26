@@ -1043,8 +1043,14 @@ export default function AdminDashboard() {
   };
 
   const handleAddBlog = async () => {
-    if (!blogForm.image || !blogForm.text) {
-      showMessage('error', 'Please upload an image and enter text');
+    if (!blogForm.image || !blogForm.text || !blogForm.layout) {
+      showMessage('error', 'Please upload an image, select layout, and enter text');
+      return;
+    }
+
+    // Validate text length - 1500 character limit
+    if (blogForm.text.length > 1500) {
+      showMessage('error', `Text exceeds 1,500 character limit (current: ${blogForm.text.length})`);
       return;
     }
 
@@ -1054,7 +1060,8 @@ export default function AdminDashboard() {
         id: editingBlog ? blogForm.id : uuidv4(),
         image: blogForm.image,
         text: blogForm.text,
-        createdAt: new Date().toISOString()
+        layout: blogForm.layout,
+        createdAt: editingBlog ? blogForm.createdAt : new Date().toISOString()
       };
 
       let updatedBlogs;
@@ -1074,7 +1081,7 @@ export default function AdminDashboard() {
       if (error) throw error;
 
       setShopData(prev => ({ ...prev, blogs: updatedBlogs }));
-      setBlogForm({ id: '', image: '', text: '' });
+      setBlogForm({ id: '', image: '', text: '', layout: 'standard' });
       setEditingBlog(false);
       showMessage('success', editingBlog ? 'Blog updated!' : 'Blog added successfully!');
     } catch (error) {
