@@ -3033,8 +3033,18 @@ export default function AdminDashboard() {
       {showCropModal && cropFile && (
         <CropModal
           file={cropFile}
-          aspectRatio={cropType === 'product' ? 4 / 3 : 16 / 9}
-          title={cropType === 'product' ? 'Crop Product Image (4:3 ratio)' : 'Crop Banner Image (16:9 ratio)'}
+          aspectRatio={
+            cropType === 'product' ? 4 / 3 : 
+            cropType === 'banner' ? 16 / 9 : 
+            cropType === 'blog' ? BLOG_LAYOUTS[blogForm.layout].aspect : 
+            1
+          }
+          title={
+            cropType === 'product' ? 'Crop Product Image (4:3 ratio)' : 
+            cropType === 'banner' ? 'Crop Banner Image (16:9 ratio)' : 
+            cropType === 'blog' ? `Crop Blog Image (${BLOG_LAYOUTS[blogForm.layout].name})` : 
+            'Crop Image'
+          }
           onCropComplete={handleCropComplete}
           onCancel={handleCropCancel}
         />
