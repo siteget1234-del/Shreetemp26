@@ -47,6 +47,7 @@ export default function Home() {
   const [shopData, setShopData] = useState(null);
   const [products, setProducts] = useState([]);
   const [banners, setBanners] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Handle history API for all navigation states
