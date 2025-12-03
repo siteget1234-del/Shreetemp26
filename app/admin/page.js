@@ -347,6 +347,8 @@ export default function AdminDashboard() {
     } else if (cropType === 'banner') {
       setUploadingBannerImage(true);
       setBannerCompressionProgress(null);
+    } else if (cropType === 'blog') {
+      setUploadingBlogImage(true);
     }
     
     try {
@@ -359,11 +361,27 @@ export default function AdminDashboard() {
       // Determine target size and progress setter
       const isProduct = cropType === 'product';
       const isBanner = cropType === 'banner';
+      const isBlog = cropType === 'blog';
       const targetSize = isProduct ? 20 : 50;
       const progressSetter = isProduct ? setCompressionProgress : setBannerCompressionProgress;
       
+      // For blogs: Validate 200KB limit
+      if (isBlog) {
+        if (fileSizeKB > 200) {
+          showMessage('error', `Cropped image (${fileSizeKB.toFixed(0)}KB) still exceeds 200KB. Please select a smaller original image.`);
+          setUploadingBlogImage(false);
+          setCropFile(null);
+          setCropType(null);
+          setBlogImageFile(null);
+          return;
+        }
+        // Upload blog image directly
+        const imageUrl = await uploadToCloudinary(croppedFile, false);
+        setBlogForm(prev => ({ ...prev, image: imageUrl }));
+        showMessage('success', `Blog image cropped & uploaded (${fileSizeKB.toFixed(0)}KB)!`);
+      }
       // For banners: Skip compression entirely (Cloudinary will handle it)
-      if (isBanner) {
+      else if (isBanner) {
         progressSetter({ 
           step: 1, 
           message: 'Preparing banner for upload...', 
@@ -371,6 +389,18 @@ export default function AdminDashboard() {
         });
         // Use the cropped file as-is without compression
         fileToUpload = croppedFile;
+        
+        // Upload image to Cloudinary
+        progressSetter({ 
+          step: 3, 
+          message: 'Uploading to cloud...', 
+          progress: 95 
+        });
+        
+        const imageUrl = await uploadToCloudinary(fileToUpload, true);
+        setBannerForm(prev => ({ ...prev, image: imageUrl }));
+        showMessage('success', `Banner cropped & uploaded! Cloudinary will optimize on delivery.`);
+        progressSetter(null);
       } else {
         // For products: Apply compression logic
         // Skip compression if image is already under target size
@@ -388,39 +418,31 @@ export default function AdminDashboard() {
             progressSetter(progress);
           });
         }
-      }
-
-      // Upload image to Cloudinary
-      progressSetter({ 
-        step: 3, 
-        message: 'Uploading to cloud...', 
-        progress: 95 
-      });
-      
-      // Apply Cloudinary transformations for banners
-      const imageUrl = await uploadToCloudinary(fileToUpload, isBanner);
-      
-      if (cropType === 'product') {
+        
+        // Upload image to Cloudinary
+        progressSetter({ 
+          step: 3, 
+          message: 'Uploading to cloud...', 
+          progress: 95 
+        });
+        
+        const imageUrl = await uploadToCloudinary(fileToUpload, false);
         setProductForm(prev => ({ ...prev, image: imageUrl }));
-      } else if (cropType === 'banner') {
-        setBannerForm(prev => ({ ...prev, image: imageUrl }));
+        
+        const finalSizeKB = fileToUpload.size / 1024;
+        if (fileSizeKB < targetSize) {
+          showMessage('success', `Image cropped & uploaded (${fileSizeKB.toFixed(2)}KB)!`);
+        } else {
+          showMessage('success', `Image cropped, compressed (${finalSizeKB.toFixed(2)}KB) & uploaded!`);
+        }
+        progressSetter(null);
       }
-      
-      const finalSizeKB = fileToUpload.size / 1024;
-      if (isBanner) {
-        showMessage('success', `Banner cropped & uploaded! Cloudinary will optimize on delivery.`);
-      } else if (fileSizeKB < targetSize) {
-        showMessage('success', `Image cropped & uploaded (${fileSizeKB.toFixed(2)}KB)!`);
-      } else {
-        showMessage('success', `Image cropped, compressed (${finalSizeKB.toFixed(2)}KB) & uploaded!`);
-      }
-      progressSetter(null);
     } catch (error) {
       console.error('Image upload error:', error);
       showMessage('error', 'Failed to compress/upload image');
       if (cropType === 'product') {
         setCompressionProgress(null);
-      } else {
+      } else if (cropType === 'banner') {
         setBannerCompressionProgress(null);
       }
     } finally {
@@ -428,9 +450,12 @@ export default function AdminDashboard() {
         setUploadingImage(false);
       } else if (cropType === 'banner') {
         setUploadingBannerImage(false);
+      } else if (cropType === 'blog') {
+        setUploadingBlogImage(false);
       }
       setCropFile(null);
       setCropType(null);
+      setBlogImageFile(null);
     }
   };
 
