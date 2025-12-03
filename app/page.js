@@ -1039,7 +1039,7 @@ export default function Home() {
               const BannerContent = () => (
                 <div className="relative h-full flex items-center justify-center overflow-hidden bg-gray-200">
                   {banner.image ? (
-                    <img src={banner.image} alt={`Banner ${banner.order || index + 1}`} className="w-full h-full object-cover" />
+                    <img src={applyCloudinaryOptimization(banner.image)} alt={`Banner ${banner.order || index + 1}`} className="w-full h-full object-cover" />
                   ) : (
                     <div className="text-gray-400 text-center">
                       <p className="text-lg">No banner image</p>
