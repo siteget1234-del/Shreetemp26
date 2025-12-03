@@ -1323,21 +1323,99 @@ export default function Home() {
             <p className="text-gray-600">आमचे अलीकडील अपडेट्स</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs.map(blog => (
-              <div key={blog.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300">
-                <div className="relative h-48">
-                  <img 
-                    src={blog.image || 'https://via.placeholder.com/400x300?text=Blog+Image'} 
-                    alt="Blog"
-                    className="w-full h-full object-cover"
-                  />
+            {blogs.map(blog => {
+              // Define layout aspect ratios
+              const layoutAspects = {
+                standard: 16/9,
+                portrait: 4/5,
+                square: 1,
+                wide: 21/9
+              };
+              const aspect = layoutAspects[blog.layout || 'standard'];
+              
+              return (
+                <div key={blog.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 flex flex-col">
+                  <div className="relative w-full bg-gray-100" style={{ paddingBottom: `${(1 / aspect) * 100}%` }}>
+                    <img 
+                      src={blog.image || 'https://via.placeholder.com/400x300?text=Blog+Image'} 
+                      alt="Blog"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-6 flex-1">
+                    <div 
+                      className="text-gray-700 leading-relaxed blog-content"
+                      dangerouslySetInnerHTML={{ __html: blog.text }}
+                    />
+                  </div>
                 </div>
-                <div className="p-6">
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{blog.text}</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
+          
+          {/* Custom Styles for Blog Content */}
+          <style jsx>{`
+            .blog-content {
+              font-size: 15px;
+              line-height: 1.6;
+            }
+            
+            .blog-content h1 {
+              font-size: 24px;
+              font-weight: 700;
+              margin-bottom: 12px;
+              color: #1f2937;
+            }
+            
+            .blog-content h2 {
+              font-size: 20px;
+              font-weight: 700;
+              margin-bottom: 10px;
+              color: #1f2937;
+            }
+            
+            .blog-content h3 {
+              font-size: 18px;
+              font-weight: 600;
+              margin-bottom: 8px;
+              color: #374151;
+            }
+            
+            .blog-content p {
+              margin-bottom: 12px;
+            }
+            
+            .blog-content ul,
+            .blog-content ol {
+              margin-left: 20px;
+              margin-bottom: 12px;
+            }
+            
+            .blog-content li {
+              margin-bottom: 6px;
+            }
+            
+            .blog-content strong {
+              font-weight: 600;
+            }
+            
+            .blog-content em {
+              font-style: italic;
+            }
+            
+            .blog-content u {
+              text-decoration: underline;
+            }
+            
+            .blog-content a {
+              color: #059669;
+              text-decoration: underline;
+            }
+            
+            .blog-content a:hover {
+              color: #047857;
+            }
+          `}</style>
         </section>
       )}
 
