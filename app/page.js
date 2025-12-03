@@ -935,7 +935,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-emerald-700 to-emerald-600 text-white sticky top-0 z-50 shadow-xl">
+      <header className="bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-500 text-white sticky top-0 z-50 shadow-2xl">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2" onClick={() => { setSelectedCategory(null); setShowSearch(false); setSearchQuery(''); }} style={{ cursor: 'pointer' }}>
