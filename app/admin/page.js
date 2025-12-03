@@ -33,6 +33,7 @@ export default function AdminDashboard() {
     },
     products: [],
     banners: [],
+    blogs: [],
     overview: {
       totalViews: 0,
       totalOrders: 0,
