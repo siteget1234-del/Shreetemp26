@@ -1692,7 +1692,7 @@ export default function Home() {
                   disabled={!deliveryAddress}
                   className={`w-full font-bold py-4 rounded-xl transition flex items-center justify-center space-x-2 shadow-lg ${
                     deliveryAddress 
-                      ? 'bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white' 
+                      ? 'bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 hover:from-emerald-800 hover:via-emerald-700 hover:to-teal-700 text-white' 
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
                   data-testid="whatsapp-order-btn"
