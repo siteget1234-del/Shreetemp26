@@ -878,6 +878,15 @@ export default function AdminDashboard() {
       return;
     }
 
+    // Validate file size - 2MB limit for banners
+    const maxSizeBytes = 2 * 1024 * 1024; // 2MB
+    if (file.size > maxSizeBytes) {
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+      showMessage('error', `File size (${fileSizeMB}MB) exceeds 2MB limit. Please select a smaller image.`);
+      e.target.value = '';
+      return;
+    }
+
     // Open crop modal
     setCropFile(file);
     setCropType('banner');
