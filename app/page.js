@@ -1481,7 +1481,7 @@ export default function Home() {
         <div className="fixed inset-0 z-50 overflow-hidden">
           <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setShowCart(false)}></div>
           <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
-            <div className="bg-gradient-to-r from-emerald-700 to-emerald-600 text-white p-5 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 text-white p-5 flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold">माझी कार्ट</h2>
                 <p className="text-sm text-emerald-100">{cartItemCount} वस्तू</p>
